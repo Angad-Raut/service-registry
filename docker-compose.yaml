@@ -1,0 +1,10 @@
+version: '1.0'
+services:
+  service-registry-app:
+    container_name: serviceRegistryContainer
+    image: eureka-server
+    restart: always
+    build: .
+    ports:
+      - 8761:8761
+
