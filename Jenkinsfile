@@ -29,7 +29,7 @@ pipeline {
         }
         stage('Deploy on Tomcat') {
              steps {
-                  bat 'cp http://localhost:8080/job/Docker-Container/job/service-registry/$BUILD_NUMBER/execution/node/3/ws/target/eureka-server.war  C:/Program Files/Apache Software Foundation/Tomcat 9.0/webapps/'
+                  bat("xcopy http://localhost:8080/job/Docker-Container/job/service-registry/$BUILD_NUMBER/execution/node/3/ws/target/eureka-server.war  C:/Program Files/Apache Software Foundation/Tomcat 9.0/webapps/")
                   echo 'SUCCESS'
              }
         }
