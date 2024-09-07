@@ -1,9 +1,4 @@
 pipeline {
-    environment {
-       registry = "9766945760/eureka-server"
-       registryCredential = 'dockerhub-credentials'
-       dockerImage = ''
-    }
     agent any
     tools {
         jdk 'Jdk17'
@@ -32,30 +27,10 @@ pipeline {
                 bat 'mvn clean package'
             }
         }
-        stage('Docker Build') {
-            steps{
-                script {
-                    dockerImage = docker.build registry
-                    echo 'Build Image Completed'
-                }
-            }
-        }
-        stage('Docker Push') {
-            steps {
-                script {
-                    docker.withRegistry( '', registryCredential ) {
-                       dockerImage.push('latest')
-                       echo 'Push Image Completed'
-                    }
-                }
-            }
-        }
-        stage('Deployment') {
+        stage('Deploy on Tomcat') {
              steps {
-                  bat 'docker-compose up --build -d'
+                  bat 'cp http://localhost:8080/job/Docker-Container/job/service-registry/$BUILD_NUMBER/execution/node/3/ws/target/eureka-server.war  C:/Program Files/Apache Software Foundation/Tomcat 9.0/webapps/'
                   echo 'SUCCESS'
-                  bat 'docker logout'
-                  bat 'docker rmi 9766945760/eureka-server:latest'
              }
         }
     }
