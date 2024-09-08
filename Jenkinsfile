@@ -22,14 +22,32 @@ pipeline {
                 bat 'mvn test'
             }
         }
-        stage('Build Artifact') {
+        stage('Build Project') {
             steps {
                 bat 'mvn clean package'
             }
         }
+        stage('Archive Artifacts'){
+            steps {
+                archiveArtifacts artifacts: 'target/*.war'
+            }
+        }
         stage('Deploy on Tomcat') {
              steps {
-                  bat("xcopy http://localhost:8080/job/Docker-Container/job/service-registry/$BUILD_NUMBER/execution/node/3/ws/target/eureka-server.war" "C:/Program Files/Apache Software Foundation/Tomcat 9.0/webapps/")
+                  deploy adapters: [tomcat9(url: 'http://localhost:8085/',
+                                    credentialsId: 'tomcat_deployer')],
+                         war: 'target/*.war',
+                         contextPath: 'service-registry'
+                  echo 'SUCCESS'
+             }
+        }
+        stage('Notification'){
+             steps {
+                  emailext(
+                     subject: 'Service Registry Microservice Deployed',
+                     body: 'Service registry microservice successfully deployed on tomcat server',
+                     to: 'angadraut89@gmail.com'
+                  )
                   echo 'SUCCESS'
              }
         }
