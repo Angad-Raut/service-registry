@@ -15,38 +15,27 @@ pipeline {
         stage('Code Compile') {
             steps {
                 bat 'mvn clean compile'
-            }
-        }
-        stage('Unit Tests') {
-            steps {
-                bat 'mvn test'
+                echo 'SUCCESS'
             }
         }
         stage('Build Project') {
             steps {
                 bat 'mvn clean package'
+                echo 'SUCCESS'
             }
         }
         stage('Archive Artifacts'){
             steps {
                 archiveArtifacts artifacts: 'target/*.war'
+                echo 'SUCCESS'
             }
         }
         stage('Deploy on Tomcat') {
              steps {
-                  deploy adapters: [tomcat9(url: 'http://localhost:8085/',
+                  deploy adapters: [tomcat10(url: 'http://localhost:8086/',
                          credentialsId: 'tomcat-credentials')],
                          war: 'target/*.war',
                          contextPath: 'service-registry'
-             }
-        }
-        stage('Notification'){
-             steps {
-                  emailext(
-                     subject: 'Service Registry Microservice Deployed',
-                     body: 'Service registry microservice successfully deployed on tomcat server',
-                     to: 'angadraut89@gmail.com'
-                  )
                   echo 'SUCCESS'
              }
         }
