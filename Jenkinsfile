@@ -32,7 +32,7 @@ pipeline {
         }
         stage('Deploy on Tomcat') {
              steps {
-                  deploy adapters: [tomcat10(url: 'http://localhost:8086/',
+                  deploy adapters: [tomcat9(url: 'http://localhost:8086/',
                          credentialsId: 'tomcat-credentials')],
                          war: 'target/*.war',
                          contextPath: 'service-registry'
