@@ -35,7 +35,7 @@ pipeline {
                   deploy adapters: [tomcat9(url: 'http://localhost:8086/',
                          credentialsId: 'tomcat-credentials')],
                          war: 'target/*.war',
-                         contextPath: 'service-registry'
+                         contextPath: 'eureka-server'
                   echo 'SUCCESS'
              }
         }
